@@ -12,7 +12,7 @@ total_months = 0
 
 while current_savings <= down_payment:
 
-    if total_months % 6 == 0:
+    if total_months % 6 == 0 and total_months != 0:
         annual_salary += annual_salary * semi_annual_raise
         monthly_salary = annual_salary / 12
         monthly_earnings = monthly_salary * portion_saved
