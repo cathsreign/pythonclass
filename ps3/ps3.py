@@ -91,10 +91,10 @@ def get_word_score(word, n):
         score.append(SCRABBLE_LETTER_VALUES.get(let))
     letter_points = sum(score)
 
-    word_score = 7*len(word) - 3*(n - len(word))
+    word_score = 7 * len(word) - 3 * (n - len(word))
     if word_score < 1:
         word_score = 1
-    return letter_points*word_score
+    return letter_points * word_score
 
 #
 # Make sure you understand how this function works and what it does!
@@ -294,7 +294,7 @@ def play_hand(hand, word_list):
         print()
         print('Current hand:', end=' '), display_hand(hand)
         user_input = str.lower(input('Please enter a word, or "!!" to indicate that you are finished: '))
-        if user_input == '!!':
+        if user_input == '!!!':
             print('Total score for this hand:', total_score)
             break
         else:
@@ -383,9 +383,49 @@ def play_game(word_list):
     * Returns the total score for the series of hands
     word_list: list of lowercase strings
     """
-    
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
-    
+    sub_count = 1
+    replay_count = 1
+    num_hands = int(input('Enter total number of hands: '))
+    total = 0
+    while num_hands >= 1:
+        new_score = 0
+        hand = deal_hand(HAND_SIZE)
+        while sub_count >= 1:
+            print()
+            print('Current hand:', end=' '), display_hand(hand)
+            sub_option = input('Would you like to substitute a letter: ')
+            if sub_option.lower() == 'yes':
+                letter = input('Which letter would you like to replace: ')
+                hand = substitute_hand(hand, letter)
+                sub_count = sub_count - 1
+                break
+            elif sub_option.lower() == 'no':
+                break
+        
+        score = play_hand(hand, word_list)
+
+        while replay_count >= 1:
+            print('----------')
+            replay_option = input('Would you like to replay the hand: ')
+            if replay_option.lower() == 'yes':
+                while sub_count >= 1:
+                    sub_option = input('Would you like to substitute a letter: ')
+                    if sub_option.lower() == 'yes':
+                        letter = input('Which letter would you like to replace: ')
+                        hand = substitute_hand(hand, letter)
+                        sub_count = sub_count - 1
+                        break
+                    elif sub_option.lower() == 'no':
+                        break
+                new_score = play_hand(hand, word_list)
+                replay_count = replay_count - 1
+            elif replay_option == 'no':
+                break
+
+        total = max(score, new_score) + total
+        num_hands = num_hands - 1
+    print('----------')
+    print('Total score over all hands: ', total)
 
 
 #
